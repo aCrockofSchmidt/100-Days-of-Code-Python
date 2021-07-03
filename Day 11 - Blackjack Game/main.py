@@ -4,46 +4,45 @@ from art import logo
 from replit import clear
 import random
 
-# function to initiate game play
+# function to determine player's willingness to play
+
+def gameplay_choice():
+  play_a_game = input("\nWould you like to play Blackjack (y/n)? ")
+  if play_a_game == "y":
+    play_blackjack()
+  else:
+    print(game_end)
+
+# function to initiate gameplay    
 
 def play_blackjack():
   clear()
   print(logo)
-  gameplay_choice = input("\nWould you like to play Blackjack (y/n)? ")
-
-  if gameplay_choice == 'n':
-    print(game_end)
-  else:
-    clear()
-    print(logo)
-    player_hand = random.sample(cards, 2)
-    dealer_hand = random.sample(cards, 1) + ["X"]
-    print(f"Your hand is: {player_hand} for a total of {sum(player_hand)}")
-    print(f"The dealer's hand is: {dealer_hand}")
-    players_hand_playout(player_hand, dealer_hand)
+  player_hand = random.sample(cards, 2)
+  dealer_hand = random.sample(cards, 1) + ["X"]
+  print(f"Your hand is: {player_hand} for a total of {sum(player_hand)}")
+  print(f"The dealer's hand is: {dealer_hand}")
+  players_hand_playout(player_hand, dealer_hand)
 
 # function to determine players final hand
 
 def players_hand_playout(player_hand, dealer_hand):
-  hit_or_hold = "y"
-  while hit_or_hold == "y":
-    hit_or_hold = input("\nWould you like to HIT(y) or HOLD(n)? ")
-    if hit_or_hold == "y":
-      player_hand += random.sample(cards,1)
-      if sum(player_hand) > 21 and 11 in player_hand:
-        for i in range(len(player_hand)):
-          if player_hand[i] == 11:
-            player_hand[i] = 1
-      elif sum(player_hand) > 21 and 11 not in player_hand:
-        dealer_hand.remove("X")
-        dealer_hand += random.sample(cards, 1)
-        ultimate_winner(player_hand, dealer_hand)
-        hit_or_hold = "n"
-        return
-      print(f"\nYour hand is: {player_hand} for a total of {sum(player_hand)}")
-      print(f"The Dealer's hand is: {dealer_hand}")
-      players_hand_playout(player_hand, dealer_hand)
+  hit_or_hold = input("\nWould you like to HIT(y) or HOLD(n)? ")
+  if hit_or_hold == "y":
+    player_hand += random.sample(cards,1)
+    if sum(player_hand) > 21 and 11 in player_hand:
+      for i in range(len(player_hand)):
+        if player_hand[i] == 11:
+          player_hand[i] = 1
+    elif sum(player_hand) > 21 and 11 not in player_hand:
+      dealer_hand.remove("X")
+      dealer_hand += random.sample(cards, 1)
+      ultimate_winner(player_hand, dealer_hand)
       return
+    print(f"\nYour hand is: {player_hand} for a total of {sum(player_hand)}")
+    print(f"The Dealer's hand is: {dealer_hand}")
+    players_hand_playout(player_hand, dealer_hand)
+    return
   dealers_hand_playout(player_hand, dealer_hand)
 
 
@@ -86,11 +85,7 @@ def ultimate_winner(player_hand, dealer_hand):
   else:
     print("\nDRAW\n")
 
-  play_again = input("Would you like to play another game (y/n)? ")
-  if play_again == "y":
-    play_blackjack()
-  else:
-    print(game_end)
+  gameplay_choice()
 
 # Set initial conditions
 
@@ -98,8 +93,8 @@ cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 game_end = "\nThanks for playing!\nGoodbye."
 
 # START GAME
-play_blackjack()
 
+gameplay_choice()
 
 
 
