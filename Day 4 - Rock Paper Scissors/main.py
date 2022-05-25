@@ -1,5 +1,3 @@
-import random
-
 rock = '''
     _______
 ---'   ____)
@@ -27,34 +25,24 @@ scissors = '''
 ---.__(___)
 '''
 
-images = [rock, paper, scissors]
+import random
 
-player_choice = int(input("What do you choose? Type 0 for Rock, 1 for Paper, or 2 for Scissors."))
+image_list = [rock, paper, scissors]
 
-# if player_choice == 0:
-#   print(rock)
-# elif player_choice == 1:
-#   print(paper)
-# else:
-#   print(scissors)
+player_choice = int(input("What do you choose? Type 0 for ROCK, 1 for PAPER, or 2 for SCISSORS. "))
 
-print(images[player_choice])
-
-computer_choice = random.randint(0,2)
-print("Computer chose:")
-
-# if computer_choice == 0:
-#   print(rock)
-# elif computer_choice == 1:
-#   print(paper)
-# else:
-#   print(scissors)
-
-print(images[computer_choice])
-
-if player_choice == computer_choice:
-  print("Draw")
-elif (player_choice == 0 and computer_choice == 2) or (player_choice == 1 and computer_choice == computer_choice == 0) or (player_choice == 2 and computer_choice == 1):
-  print("You Win!")
+if player_choice >= 3 or player_choice < 0:
+  print("You chose an invalid number, you lose.")
 else:
-  print("You Lose!")
+  print(image_list[player_choice])
+
+  computer_choice = int(random.randint(0,2))
+  print("\nComputer chose " + image_list[computer_choice])
+
+
+  if player_choice == computer_choice:
+    print("Tie")
+  elif (player_choice == 0 and computer_choice == 2) or (player_choice == 1 and computer_choice == 0) or (player_choice == 2 and computer_choice == 1):
+    print("You Win!")
+  else:
+    print("You Lose")
