@@ -1,105 +1,3 @@
-#import required functions/methods
-
-from art import logo
-from replit import clear
-import random
-
-# function to determine player's willingness to play
-
-def gameplay_choice():
-  play_a_game = input("\nWould you like to play Blackjack (y/n)? ")
-  if play_a_game == "y":
-    play_blackjack()
-  else:
-    print(game_end)
-
-# function to initiate gameplay    
-
-def play_blackjack():
-  clear()
-  print(logo)
-  player_hand = random.sample(cards, 2)
-  dealer_hand = random.sample(cards, 1) + ["X"]
-  print(f"Your hand is: {player_hand} for a total of {sum(player_hand)}")
-  print(f"The dealer's hand is: {dealer_hand}")
-  players_hand_playout(player_hand, dealer_hand)
-
-# function to determine players final hand
-
-def players_hand_playout(player_hand, dealer_hand):
-  hit_or_hold = input("\nWould you like to HIT(y) or HOLD(n)? ")
-  if hit_or_hold == "y":
-    player_hand += random.sample(cards,1)
-    if sum(player_hand) > 21 and 11 in player_hand:
-      for i in range(len(player_hand)):
-        if player_hand[i] == 11:
-          player_hand[i] = 1
-    elif sum(player_hand) > 21 and 11 not in player_hand:
-      dealer_hand.remove("X")
-      dealer_hand += random.sample(cards, 1)
-      ultimate_winner(player_hand, dealer_hand)
-      return
-    print(f"\nYour hand is: {player_hand} for a total of {sum(player_hand)}")
-    print(f"The Dealer's hand is: {dealer_hand}")
-    players_hand_playout(player_hand, dealer_hand)
-    return
-  dealers_hand_playout(player_hand, dealer_hand)
-
-
-# function to determine dealers final hand
-
-def dealers_hand_playout(player_hand, dealer_hand):
-  if "X" in dealer_hand:
-    dealer_hand.remove("X")
-    dealer_hand += random.sample(cards, 1)
-  if sum(dealer_hand) < 17:
-    dealer_hand += random.sample(cards, 1)
-    if sum(dealer_hand) > 21 and 11 in dealer_hand:
-      for i in range(len(dealer_hand)):
-        if dealer_hand[i] == 11:
-          dealer_hand[i] = 1
-      dealers_hand_playout(player_hand, dealer_hand)
-      return
-    elif sum(dealer_hand) > 21 and 11 not in dealer_hand:
-      ultimate_winner(player_hand, dealer_hand)
-      return
-      dealers_hand_playout(player_hand, dealer_hand)
-      return
-  ultimate_winner(player_hand, dealer_hand)
-
-# function to determine winner
-
-def ultimate_winner(player_hand, dealer_hand):
-
-  print(f"\nYour final hand is: {player_hand} for a total of {sum(player_hand)}")
-  print(f"The dealer's final hand is: {dealer_hand} for a total of {sum(dealer_hand)}")
-
-  if sum(dealer_hand) > 21:
-    print("\nDealer Busts!\nYOU WIN!!\n")
-  elif sum(player_hand) > 21:
-    print("\nYou Busted!\nDEALER WINS!!\n")
-  elif sum(player_hand) > sum(dealer_hand):
-    print("\nYOU WIN!\n")
-  elif sum(player_hand) < sum(dealer_hand):
-    print("\nDEALER WINS!\n")
-  else:
-    print("\nDRAW\n")
-
-  gameplay_choice()
-
-# Set initial conditions
-
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-game_end = "\nThanks for playing!\nGoodbye."
-
-# START GAME
-
-gameplay_choice()
-
-
-
-
-
 ############### Blackjack Project #####################
 
 #Difficulty Normal 😎: Use all Hints below to complete the project.
@@ -118,6 +16,112 @@ gameplay_choice()
 ## The cards in the list have equal probability of being drawn.
 ## Cards are not removed from the deck as they are drawn.
 ## The computer is the dealer.
+
+from art import logo
+from replit import clear
+import random
+
+def choose_card():
+  """Chooses a random card from established deck"""
+  cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+  return random.choice(cards)
+
+def calculate_score(cards):
+  """Calculates score based on cards in hand"""
+  if sum(cards) == 21 and len(cards) == 2:
+    return 0
+  if 11 in cards and sum(cards) > 21:
+    cards.remove(11)
+    cards.append(1)
+  return sum(cards)
+  
+def compare_scores(player_score, computer_score):
+  """Compares scores to determine winner"""
+  if player_score == computer_score:
+    return "\nThe game is a draw."
+  elif player_score == 0:
+    return "\nYou got Blackjack. You win!"
+  elif computer_score == 0:
+    return "\nDealer got Blackjack. You lose."
+  elif player_score > 21:
+    return "\nYou bust."
+  elif computer_score > 21:
+    return "\nDealer busts. You win!"
+  elif player_score > computer_score:
+    return "\nYou win!"
+  else:
+    return "\nDealer wins."
+  
+def play_game():
+  clear()
+  print(logo)
+
+  player_cards = []
+  computer_cards = []
+  done_play = False
+  
+  for _ in range(2):
+    player_cards.append(choose_card())
+    computer_cards.append(choose_card())
+  
+  while not done_play:
+    player_score = calculate_score(player_cards)
+    computer_score = calculate_score(computer_cards)
+    print(f"\nYou're cards are {player_cards}. You're total is {player_score}")
+    print(f"\nThe dealer's first card is {computer_cards[0]}.")
+    
+    if player_score == 0 or computer_score == 0 or player_score > 21:
+      done_play = True
+    
+    else:
+      hit_or_hold = input("\nDo you want to HIT ('y') or HOLD ('n')? ")
+      if hit_or_hold == "n":
+        done_play = True
+      else:
+        player_cards.append(choose_card())
+
+  while computer_score != 0 and computer_score < 17:
+    computer_cards.append(choose_card())
+    computer_score = calculate_score(computer_cards)
+    
+  print(f"\nYou're final cards are {player_cards} and your final score is {player_score}")
+  print(f"\nThe dealer's final cards are {computer_cards} and the dealer's final score is {computer_score}.")
+  print(compare_scores(player_score, computer_score))
+
+while input("\nWould you like to play a game of BlackJack? Type 'y' or 'n': ") == "y":
+  play_game()
+print("\nGoodbye")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##################### Hints #####################
 
