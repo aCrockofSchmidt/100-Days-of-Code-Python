@@ -33,13 +33,13 @@ resources = {
 # adding a dictionary to track income
 # this could just as easily have been added to the existing resources library
 # but I wanted to keep it separate to show that it was something I added to existing start code from class
-
-income = {
-    "total_income": 0
-}
-
-
-machine_on = True
+#
+# after watching teacher solution, I learned what needed to be done to avoid using a new dictionary for income
+# I needed to specify "global" with my variable inside the function .... d'oh!
+#
+#income = {
+#    "total_income": 0
+#}
 
 def check_transaction(choice, total_inserted):
     """this function receives the users order and total money inserted
@@ -56,7 +56,8 @@ def check_transaction(choice, total_inserted):
         if choice != "espresso":
             resources['milk'] -= MENU[choice]['ingredients']['milk']
         resources['coffee'] -= MENU[choice]['ingredients']['coffee']
-        income['total_income'] += MENU[choice]['cost']
+        global total_income
+        total_income += MENU[choice]['cost']
 
         print(f"Here is your {choice}. Enjoy!\n")
 
@@ -86,6 +87,9 @@ def check_resources(choice):
     else:
         ask_for_coins(choice)
 
+machine_on = True
+total_income = 0
+
 while machine_on == True:
     customer_choice = input("What would you like? (espresso/latte/cappuccino): ")
 
@@ -97,7 +101,7 @@ while machine_on == True:
         print(f"Water: {resources['water']} ml")
         print(f"Milk: {resources['milk']} ml")
         print(f"Coffee: {resources['coffee']} g")
-        print(f"Money: ${income['total_income']}")
+        print(f"Money: ${total_income}")
 
     else:
         check_resources(customer_choice)
