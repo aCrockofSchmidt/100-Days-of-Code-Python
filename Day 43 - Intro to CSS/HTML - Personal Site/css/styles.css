@@ -1,0 +1,16 @@
+body {
+    background-color: darkseagreen;
+}
+hr {
+    border-style: none;
+    border-top: dotted;
+    border-color: darkorange;
+    border-width: 5px;
+    width: 15%;
+}
+h1 {
+    color: forestgreen;
+}
+h3 {
+    color: forestgreen;
+}
