@@ -14,6 +14,8 @@ import random
 import pandas as pd
 import os
 
+EMAIL_PASS = os.environ.get("GMAIL_PASSWORD")
+
 # access birthday information in csv file
 
 with open("birthdays.csv") as data:
@@ -38,7 +40,7 @@ if len(matches) != 0:
 
     with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
         connection.starttls()
-        connection.login(user="the.legendary.flush@gmail.com", password="vccbbkrijzbuovus")
+        connection.login(user="the.legendary.flush@gmail.com", password=EMAIL_PASS)
         connection.sendmail(
             from_addr="the.legendary.flush@gmail.com",
             to_addrs=matches.email.item(),

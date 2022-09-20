@@ -2,10 +2,11 @@ import requests
 from datetime import datetime
 import smtplib
 import time
+import os
 
 MY_LAT = 51.048615 # Your latitude
 MY_LONG = -114.070847 # Your longitude
-
+EMAIL_PASS = os.environ.get("GMAIL_PASSWORD")
 
 def iss_check():
     response = requests.get(url="http://api.open-notify.org/iss-now.json")
@@ -45,7 +46,7 @@ def iss_check():
     if is_close and is_dark:
         with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
             connection.starttls()
-            connection.login(user="the.legendary.flush@gmail.com", password="vccbbkrijzbuovus")
+            connection.login(user="the.legendary.flush@gmail.com", password=EMAIL_PASS)
             connection.sendmail(
                 from_addr="the.legendary.flush@gmail.com",
                 to_addrs="the_legendary_flush@yahoo.com",
